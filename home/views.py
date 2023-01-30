@@ -1,18 +1,43 @@
 from django.shortcuts import render
+from .models import *
+
 
 # Create your views here.
 
 
 def home(request):
-    return render(request, 'index.html')
+    views = {}
+    views['services'] = Services.objects.all()
+    views['feedbacks'] = Feedback.objects.all()
+    return render(request, 'index.html', views)
 
 
 def about(request):
-    return render(request, 'about.html')
+    views = {}
+    views['feedbacks'] = Feedback.objects.all()
+    return render(request, 'about.html', views)
 
 
 def contact(request):
-    return render(request, 'contact.html')
+    views = {}
+    views['information'] = information.objects.all()
+    if request.method == "POST":
+        name = request.POST['name']
+        email = request.POST['email']
+        subject = request.POST['subject']
+        message = request.POST['message']
+        data = Contact.objects.create(
+            name=name,
+            email=email,
+            subject=subject,
+            message=message
+        )
+        data.save()
+
+
+
+
+    return render(request, 'contact.html', views)
 
 
 def portfolio(request):
@@ -20,11 +45,11 @@ def portfolio(request):
 
 
 def price(request):
-    return render(request, 'index.html')
+    return render(request, 'price.html')
 
 
 def services(request):
-    return render(request, 'index.html')
+    return render(request, 'services.html')
 
 
 
